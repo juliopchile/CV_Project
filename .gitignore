@@ -1,0 +1,13 @@
+# Directories
+/models/
+/datasets/
+.supersecrets.py
+
+# PyCharm
+.idea/
+
+# VS Code
+.vscode/
+
+# Secrets
+supersecrets.py
