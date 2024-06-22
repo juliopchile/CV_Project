@@ -63,7 +63,7 @@ if __name__ == "__main__":
     print(lista_de_model_pt)
     testear_modelos(lista_de_model_pt)
 
-     #Validar los modelos mios
+    # Validar los modelos mios
     for best_path in lista_de_model_pt[5:]:
         model_name, dataset_name, optimizer = get_dataset_from_weight_path(best_path)
         validation_directory = f"{model_name}/{dataset_name}/{optimizer}"

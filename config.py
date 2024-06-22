@@ -16,7 +16,6 @@ downloadable_models = (yolo_models + sam_models + fast_sam_models)
 # Modelos usables
 loadable_models = downloadable_models + nas_models
 
-
 # ? ----DATASETS----- ? #
 
 # Path donde guardar todos los datasets
@@ -32,7 +31,6 @@ datasets_link = {
     "Shiny_v2": dict(workspace="alejandro-guerrero-zihxm", project="shiny_salmons", version=2, name="ShinySalmonsV2"),
     "Shiny_v4": dict(workspace="alejandro-guerrero-zihxm", project="shiny_salmons", version=4, name="ShinySalmonsV4"),
 }
-
 
 # Diccionario usado para acceder a los datasets para los experimentos. (Comentar/borrar los que no se quieran entrenar)
 datasets_path = {

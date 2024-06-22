@@ -74,11 +74,11 @@ if __name__ == "__main__":
         Resultados:
         Conclusiones:
     """
-    epochs = 100        # Exp 1 y 2
-    epochs_sgd = 50     # Exp 3
-    epochs_adam = 70    # Exp 3
-    finetune = 15       # Cambiar según se requiera
-    lr0 = 0.001         # Cambiar según se requiera
+    epochs = 100  # Exp 1 y 2
+    epochs_sgd = 50  # Exp 3
+    epochs_adam = 70  # Exp 3
+    finetune = 15  # Cambiar según se requiera
+    lr0 = 0.001  # Cambiar según se requiera
 
     modelo_c = "yolov9c-seg"
     modelo_e = "yolov9e-seg"
@@ -86,8 +86,8 @@ if __name__ == "__main__":
     # Parámetros por defecto para cada dataset, para ambos tamaños de modelo
     train_params_c = get_training_params_for_datasets(modelo_c)
     train_params_e = get_training_params_for_datasets(modelo_e)
-    add_extra_training_params(train_params_c,lr0=lr0, batch=8, imgsz=640, single_cls=True, cos_lr=True, plots=True)
-    add_extra_training_params(train_params_e,lr0=lr0, batch=8, imgsz=640, single_cls=True, cos_lr=True, plots=True)
+    add_extra_training_params(train_params_c, lr0=lr0, batch=8, imgsz=640, single_cls=True, cos_lr=True, plots=True)
+    add_extra_training_params(train_params_e, lr0=lr0, batch=8, imgsz=640, single_cls=True, cos_lr=True, plots=True)
 
     # ADAM SIZE C
     # Transfer learning yolov9c con Adam
@@ -95,7 +95,8 @@ if __name__ == "__main__":
     add_extra_training_params(yolov9c_adam, optimizer="AdamW", name="Adam_3", epochs=epochs_adam, freeze=10)
     # Fine-tune
     yolov9c_adam_finetune = copy.deepcopy(train_params_c)
-    add_extra_training_params(yolov9c_adam_finetune, optimizer="AdamW", name="Adam_finetuned_3", epochs=finetune, lr0=lr0/10)
+    add_extra_training_params(yolov9c_adam_finetune, optimizer="AdamW", name="Adam_finetuned_3", epochs=finetune,
+                              lr0=lr0 / 10)
     for key, value in yolov9c_adam.items():
         yolov9c_adam_finetune[key]["model"] = os.path.join(value["project"], value["name"], "weights", "best.pt")
 
@@ -105,7 +106,8 @@ if __name__ == "__main__":
     add_extra_training_params(yolov9c_sgd, optimizer="SGD", name="SGD_3", epochs=epochs_sgd, freeze=10)
     # Fine-tune
     yolov9c_sgd_finetune = copy.deepcopy(train_params_c)
-    add_extra_training_params(yolov9c_sgd_finetune, optimizer="SGD", name="SGD_finetuned_3", epochs=finetune, lr0=lr0/10)
+    add_extra_training_params(yolov9c_sgd_finetune, optimizer="SGD", name="SGD_finetuned_3", epochs=finetune,
+                              lr0=lr0 / 10)
     for key, value in yolov9c_sgd.items():
         yolov9c_sgd_finetune[key]["model"] = os.path.join(value["project"], value["name"], "weights", "best.pt")
 
@@ -115,7 +117,8 @@ if __name__ == "__main__":
     add_extra_training_params(yolov9e_adam, optimizer="AdamW", name="Adam_3", epochs=epochs_adam, freeze=30)
     # Fine-tune
     yolov9e_adam_finetune = copy.deepcopy(train_params_e)
-    add_extra_training_params(yolov9e_adam_finetune, optimizer="AdamW", name="Adam_finetuned_3", epochs=finetune, lr0=lr0/10)
+    add_extra_training_params(yolov9e_adam_finetune, optimizer="AdamW", name="Adam_finetuned_3", epochs=finetune,
+                              lr0=lr0 / 10)
     for key, value in yolov9e_adam.items():
         yolov9e_adam_finetune[key]["model"] = os.path.join(value["project"], value["name"], "weights", "best.pt")
 
@@ -125,7 +128,8 @@ if __name__ == "__main__":
     add_extra_training_params(yolov9e_sgd, optimizer="SGD", name="SGD_3", epochs=epochs_sgd, freeze=30)
     # Fine-tune
     yolov9e_sgd_finetune = copy.deepcopy(train_params_e)
-    add_extra_training_params(yolov9e_sgd_finetune, optimizer="SGD", name="SGD_finetuned_3", epochs=finetune, lr0=lr0/10)
+    add_extra_training_params(yolov9e_sgd_finetune, optimizer="SGD", name="SGD_finetuned_3", epochs=finetune,
+                              lr0=lr0 / 10)
     for key, value in yolov9e_sgd.items():
         yolov9e_sgd_finetune[key]["model"] = os.path.join(value["project"], value["name"], "weights", "best.pt")
 
@@ -152,7 +156,7 @@ if __name__ == "__main__":
     #    thread3.start() # SGD Modelo X-Large
     #    thread4 = Thread(target=thread_safe_training, args=(modelo_e, yolov9e_adam))
     #    thread4.start() # Adam Modelo X-Large
-#
+    #
     #    # Esperar a que terminen
     #    thread1.join()
     #    thread2.join()
@@ -170,7 +174,7 @@ if __name__ == "__main__":
     #    thread3_re.start() # SGD Modelo X-Large
     #    thread4_re = Thread(target=thread_safe_training, args=(modelo_e, yolov9e_adam_finetune))
     #    thread4_re.start() # Adam Modelo X-Large
-#
+    #
     #    # Esperar a que terminen
     #    thread1_re.join()
     #    thread2_re.join()
