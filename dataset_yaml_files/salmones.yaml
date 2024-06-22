@@ -1,0 +1,6 @@
+path: C:\Users\Julio\PycharmProjects\Ultralytics\coco_converted\Salmones
+train: images/train
+val: images/valid
+
+nc: 1
+names: ["salmon"]

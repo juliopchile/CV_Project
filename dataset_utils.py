@@ -1,13 +1,33 @@
 import os
-from copy import copy
+import shutil
+import yaml
+from ultralytics.data.converter import convert_coco
 
-from roboflow.core.dataset import Dataset
-from config import datasets
+from config import datasets_link, datasets_directory, coco_labels_directory
 from roboflow import Roboflow
+
 from supersecrets import API_KEY
 
 
+# Descargar dataset
 def download_roboflow_dataset(workspace, project_id, version_number, model_format, location):
+    """
+    Descarga un dataset de Roboflow y lo guarda en la ubicación especificada.
+
+    Args:
+        workspace (str): El nombre del workspace en Roboflow.
+        project_id (str): El ID del proyecto en Roboflow.
+        version_number (int): El número de versión del dataset.
+        model_format (str): El formato del modelo a descargar.
+        location (str): La ubicación donde se guardará el dataset.
+
+    Returns:
+        dict: Información sobre el dataset descargado.
+        None: Si ocurre un error durante la descarga.
+
+    Example:
+        download_roboflow_dataset('my_workspace', 'my_project', 1, 'yolov8', 'datasets/my_dataset')
+    """
     try:
         rf = Roboflow(api_key=API_KEY)
         project = rf.workspace(the_workspace=workspace).project(project_id=project_id)
@@ -18,78 +38,129 @@ def download_roboflow_dataset(workspace, project_id, version_number, model_forma
         return None
 
 
-def get_roboflow_dataset(name):
+def copy_images(input_path, output_path):
     """
-    Retorna un objeto de la clase Roboflow Dataset, respectivo a un dataset previamente descargado.
-    :param name: Nombre del dataset, debe ser uno incluido en el diccionario "datasets"
-    :return:
+    Copia todas las imágenes de un directorio de entrada a un directorio de salida.
+
+    Args:
+        input_path (str): La ruta del directorio de entrada que contiene las imágenes.
+        output_path (str): La ruta del directorio de salida donde se copiarán las imágenes.
+
+    Example:
+        copy_images('datasets/my_dataset/train', 'datasets/my_dataset_copy/train')
     """
-    version = datasets[name]["version"]
-    model_format = datasets[name]["model_format"]
-    location = datasets[name]["location"]
-    return Dataset(name, version, model_format, location)
+    # Asegúrate de que el directorio de salida exista
+    if not os.path.exists(output_path):
+        os.makedirs(output_path)
+
+    # Define las extensiones de imagen soportadas
+    image_extensions = ('.jpg', '.jpeg', '.png', '.gif', '.bmp', '.tiff')
+
+    # Itera a través de los archivos en el directorio de entrada
+    for filename in os.listdir(input_path):
+        # Verifica si el archivo tiene una extensión de imagen
+        if filename.lower().endswith(image_extensions):
+            # Construye las rutas completas de los archivos
+            src_file = os.path.join(input_path, filename)
+            dest_file = os.path.join(output_path, filename)
+
+            # Copia el archivo
+            shutil.copy2(src_file, dest_file)
 
 
-def lista_txt_con_clase(dataset_path: str):
-    labels_con_peces = []
-    for carpeta in os.listdir(dataset_path):
-        if carpeta in ["test", "train", "valid"]:
-            labels_path = os.path.join(dataset_path, carpeta, "labels")
-            if os.path.isdir(labels_path):
-                for label_file in os.listdir(labels_path):
-                    label_file_path = os.path.join(labels_path, label_file)
-                    if os.path.isfile(label_file_path):
-                        with open(label_file_path, 'r') as file:
-                            content = file.read().strip()
-                            if content:  # Check if the file content is not empty
-                                labels_con_peces.append(label_file_path)
+def crear_coco_labels(name, path_dataset):
+    """
+    Crea etiquetas en formato COCO a partir de un dataset.
 
-    return labels_con_peces
+    Args:
+        name (str): El nombre del dataset.
+        path_dataset (str): La ruta del directorio del dataset.
 
-
-def lista_img_con_clase(labels_con_peces: list[str]):
-    imagenes_con_peces = []
-    for imagen in labels_con_peces:
-        # Replace 'labels' with 'images'
-        new_path = imagen.replace('labels', 'images')
-        # Replace '.txt' extension with '.jpg'
-        new_path = new_path.replace('.txt', '.jpg')
-        imagenes_con_peces.append(new_path)
-
-    return imagenes_con_peces
+    Example:
+        crear_coco_labels('Deepfish', 'datasets/Deepfish')
+    """
+    for directory in os.listdir(path_dataset):
+        if directory in ["test", "train", "valid"]:
+            current_path = os.path.join(path_dataset, directory)
+            output_path = os.path.join(coco_labels_directory, name, "labels", directory)
+            convert_coco(labels_dir=current_path, save_dir=output_path, use_segments=True)
 
 
-#def copiar_dataset(input_dataset: str, output_dataset: str):
-#    input_dataset = "datasets/roboflow/Deepfish"
-#    output_dataset = "datasets/roboflow/Deepfish_LO"
-#    for carpeta in os.listdir(input_dataset):
-#        if file not in ["test", "train", "valid"]:
-#            labels_path = os.path.join(dataset_path, carpeta, "labels")
-#            if os.path.isdir(labels_path):
-#                for label_file in os.listdir(labels_path):
-#                    label_file_path = os.path.join(labels_path, label_file)
-#                    if os.path.isfile(label_file_path):
-#                        with open(label_file_path, 'r') as file:
-#                            content = file.read().strip()
-#                            if content:  # Check if the file content is not empty
-#                                labels_con_peces.append(label_file_path)
+def copiar_imagenes_a_nuevo_dataset(name, path_dataset):
+    """
+    Copia las imágenes de un dataset a un nuevo directorio.
+
+    Args:
+        name (str): El nombre del dataset.
+        path_dataset (str): La ruta del directorio del dataset.
+
+    Example:
+        copiar_imagenes_a_nuevo_dataset('Deepfish', 'datasets/Deepfish')
+    """
+    for directory in os.listdir(path_dataset):
+        if directory in ["test", "train", "valid"]:
+            current_path = os.path.join(path_dataset, directory)
+            output_path = os.path.join(coco_labels_directory, name, "images", directory)
+            copy_images(current_path, output_path)
+
+
+def move_and_cleanup(base_path="coco_converted/Deepfish"):
+    """
+    Mueve archivos y limpia directorios vacíos en una estructura de directorios específica.
+
+    Args:
+        base_path (str, optional): La ruta base donde se realizará la operación. Por defecto es "coco_converted/Deepfish".
+
+    Example:
+        move_and_cleanup('coco_converted/Deepfish')
+    """
+    # Define las rutas a explorar dentro de la ruta base
+    labels_dir = os.path.join(base_path, 'labels')
+    sub_dirs = ['test', 'train', 'valid']
+
+    for sub_dir in sub_dirs:
+        sub_dir_path = os.path.join(labels_dir, sub_dir)
+        annotations_path = os.path.join(sub_dir_path, 'labels', '_annotations.coco')
+
+        if os.path.exists(annotations_path):
+            # Mueve archivos desde _annotations.coco al sub_dir_path
+            for filename in os.listdir(annotations_path):
+                src_file = os.path.join(annotations_path, filename)
+                dest_file = os.path.join(sub_dir_path, filename)
+                shutil.move(src_file, dest_file)
+
+            # Elimina los directorios labels e images vacíos
+            lower_labels_dir = os.path.join(sub_dir_path, 'labels')
+            images_dir = os.path.join(sub_dir_path, 'images')
+
+            if os.path.exists(lower_labels_dir):
+                shutil.rmtree(lower_labels_dir)
+            if os.path.exists(images_dir):
+                shutil.rmtree(images_dir)
 
 
 if __name__ == "__main__":
-    format = "yolov8-obb"
-    workspaces = ["memristor", "memristor", "alejandro-guerrero-zihxm", "alejandro-guerrero-zihxm"]
-    projects = ["deepfish-segmentation-t7gmr", "salmon-sxxri", "shiny_salmons", "shiny_salmons"]
-    versions = [1, 1, 2, 4]
-    names = ["Deepfish", "Salmones", "ShinySalmonsV2", "ShinySalmonsV4"]
+    format = "coco-segmentation"
+    datasets_a_descargar = ["Deepfish", "Salmon", "Shiny_v4"]
 
-    txt_con_peces = lista_txt_con_clase("datasets/roboflow/Deepfish")
-    img_con_peces = lista_img_con_clase(txt_con_peces)
-    for xd, xp in zip(txt_con_peces, img_con_peces):
-        print(xd)
-        print(xp)
-        print()
+    # Descargar los datasets necesarios
+    for name, info in datasets_link.items():
+        if name in datasets_a_descargar:
+            path_install_dataset = os.path.join(datasets_directory, info['name'])
+            workspace = info['workspace']
+            project = info['project']
+            version = info['version']
 
-    # Crear todos los datasets necesarios
-    #for workspace, project, version, name in zip(workspaces, projects, versions, names):
-    #    dataset_path = os.path.join("datasets/roboflow", name)
-    #    dataset = download_roboflow_dataset(workspace, project, version, format, dataset_path)
+            # Descargar dataset en formato coco desde Roboflow, en el directorio 'datasets'
+            download_roboflow_dataset(workspace, project, version, format, path_install_dataset)
+
+            # Crear labels en formato Coco, en el directorio 'coco_converted'
+            crear_coco_labels(info['name'], path_install_dataset)
+
+            # Copiar las imagenes desde el dataset descargado en 'datasets' al nuevo en 'coco_converted'
+            copiar_imagenes_a_nuevo_dataset(info['name'], path_install_dataset)
+
+            # Ordenar los labels y borrar carpetas vacías
+            move_and_cleanup(os.path.join(coco_labels_directory, info['name']))
+
+    # Luego puedes borrar la carpeta datasets y recuerda configurar los path en los archivos yaml

@@ -1,7 +1,12 @@
 # Directories
 /models/
 /datasets/
-.supersecrets.py
+/coco_converted/
+/__pycache__/
+
+# Files
+supersecrets.py
+yolov8n.pt
 
 # PyCharm
 .idea/
