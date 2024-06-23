@@ -62,6 +62,11 @@ def thread_safe_re_training(hyperparameters_dict: Dict[str, Dict[str, Any]]):
         del local_model
 
 
+def train_shiny_salmon(modelo = "yolov9c-seg"):
+    train_params = get_training_params_for_datasets(modelo)
+    add_extra_training_params(train_params, lr0=0.001, batch=8, imgsz=1024, single_cls=True, cos_lr=True, plots=True)
+
+
 if __name__ == "__main__":
     """
     Experimento 1: lr0=0.01. Se congela el backbone por 100 epochs, luego finetune con lr0=0.001.
@@ -134,16 +139,27 @@ if __name__ == "__main__":
         yolov9e_sgd_finetune[key]["model"] = os.path.join(value["project"], value["name"], "weights", "best.pt")
 
     # Training en serie
-    thread_safe_training(modelo_c, yolov9c_sgd)  # SGD Modelo Large
-    thread_safe_training(modelo_c, yolov9c_adam)  # Adam Modelo Large
-    thread_safe_training(modelo_e, yolov9e_sgd)  # SGD Modelo X-Large
-    thread_safe_training(modelo_e, yolov9e_adam)  # Adam Modelo X-Large
+    # thread_safe_training(modelo_c, yolov9c_sgd)  # SGD Modelo Large
+    # thread_safe_training(modelo_c, yolov9c_adam)  # Adam Modelo Large
+    # thread_safe_training(modelo_e, yolov9e_sgd)  # SGD Modelo X-Large
+    # thread_safe_training(modelo_e, yolov9e_adam)  # Adam Modelo X-Large
 
     # Fine-tune (cargar best.pt de los entrenamientos anteriores y entrenarlos un poco más)
-    thread_safe_re_training(yolov9c_sgd_finetune)  # SGD Modelo Large
-    thread_safe_re_training(yolov9c_adam_finetune)  # Adam Modelo Large
+    # thread_safe_re_training(yolov9c_sgd_finetune)  # SGD Modelo Large
+    # thread_safe_re_training(yolov9c_adam_finetune)  # Adam Modelo Large
     # thread_safe_re_training(yolov9e_sgd_finetune)  # SGD Modelo X-Large
     # thread_safe_re_training(yolov9e_adam_finetune)  # Adam Modelo X-Large
+
+    # Train ShinySalmon
+    yolov9e_seg_shiny = copy.deepcopy(train_params_e)
+    add_extra_training_params(yolov9e_seg_shiny, optimizer="SGD", name="SGD_2", epochs=50, freeze=30,
+                              model="models/training/yolov9e-seg/Salmones/SGD_2/weights/best.pt")
+    yolov9c_seg_shiny =copy.deepcopy(train_params_c)
+    add_extra_training_params(yolov9c_seg_shiny, optimizer="AdamW", name="Adam_2", epochs=70, freeze=10,
+                              model="models/training/yolov9c-seg/Salmones/Adam_finetuned_2/weights/best.pt")
+
+    thread_safe_re_training(yolov9c_seg_shiny)
+    thread_safe_re_training(yolov9e_seg_shiny)
 
     # Training en paralelo (No recomendado a menos que tengas pc de la NASA)
     #try:

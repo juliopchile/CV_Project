@@ -46,13 +46,11 @@ def get_dataset_path_from_alejandro_weight_pt(model_pt):
 
 if __name__ == "__main__":
     # Crear lista de modelos best.pt a usar
-    ale_modelos_sgd = ["DEEP_0001_SGD.pt", "DEEP_LO_DUP_L_SGD.pt", "SALMONS_YOLOL_SGD.pt",
-                       "SALMONS_YOLOL_SGD_RETRAINED.pt"]
-    ale_modelos_adam = "SALMONS_LO_YOLOL_ADAM.pt"
     lista_modelos_ale = ["DEEP_0001_SGD.pt", "DEEP_LO_DUP_L_SGD.pt", "SALMONS_LO_YOLOL_ADAM.pt", "SALMONS_YOLOL_SGD.pt",
                          "SALMONS_YOLOL_SGD_RETRAINED.pt"]
     lista_de_model_pt = [os.path.normpath(os.path.join(backbones_directory, modelo)) for modelo in lista_modelos_ale]
 
+    # Lisa de los path de best.pt para testear
     for model in ["yolov9c-seg", "yolov9e-seg"]:
         for optimizer in ["Adam", "SGD", "Adam_finetuned", "SGD_finetuned"]:
             for dataset in datasets_path.keys():
@@ -63,20 +61,3 @@ if __name__ == "__main__":
     print(lista_de_model_pt)
     testear_modelos(lista_de_model_pt)
 
-    # Validar los modelos mios
-    for best_path in lista_de_model_pt[5:]:
-        model_name, dataset_name, optimizer = get_dataset_from_weight_path(best_path)
-        validation_directory = f"{model_name}/{dataset_name}/{optimizer}"
-        dataset_path = datasets_path[dataset_name]
-        model = YOLO(best_path)
-        model.val(data=dataset_path, imgsz=640, batch=9, conf=0.3, iou=0.5, max_det=30, save_json=True, rect=True)
-        del model
-
-    # Validar modelos entrenados del Alejandro
-    for best_path in lista_de_model_pt[0:5]:
-        dataset_name = get_dataset_path_from_alejandro_weight_pt(best_path)
-        validation_directory, _ = os.path.splitext(best_path)
-        dataset_path = datasets_path[dataset_name]
-        model = YOLO(best_path)
-        model.val(data=dataset_path, imgsz=640, batch=9, conf=0.3, iou=0.5, max_det=30, save_json=True, rect=True)
-        del model

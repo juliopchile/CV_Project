@@ -34,7 +34,7 @@ datasets_link = {
 
 # Diccionario usado para acceder a los datasets para los experimentos. (Comentar/borrar los que no se quieran entrenar)
 datasets_path = {
-    "Salmones": "dataset_yaml_files/salmones.yaml",
-    "Deepfish": "dataset_yaml_files/deepfish.yaml",
-    #"ShinySalmonsV4": "dataset_yaml_files/shiny_salmons_v4.yaml"
+    #"Salmones": "dataset_yaml_files/salmones.yaml",
+    #"Deepfish": "dataset_yaml_files/deepfish.yaml",
+    "ShinySalmonsV4": "dataset_yaml_files/shiny_salmons_v4.yaml"
 }
