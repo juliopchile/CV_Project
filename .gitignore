@@ -19,8 +19,6 @@
 /coco_converted/**/*.*
 /shiny_salmon_models/**/*.*
 
-
-
 # Files
 supersecrets.py
 yolov8n.pt

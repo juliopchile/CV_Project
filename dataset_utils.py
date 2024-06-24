@@ -1,6 +1,5 @@
 import os
 import shutil
-import yaml
 from ultralytics.data.converter import convert_coco
 
 from config import datasets_link, datasets_directory, coco_labels_directory
