@@ -1,9 +1,25 @@
 # Directories
-/models/
-/datasets/
-/coco_converted/
 /runs/
+/test_videos/
 /__pycache__/
+
+# Incluir todos los directorios y subdirectorios
+!/models/**
+!/models/**/
+!/datasets/**
+!/datasets/**/
+!/coco_converted/**
+!/coco_converted/**/
+!/shiny_salmon_models/**
+!/shiny_salmon_models/**/
+
+# Ignorar todos los archivos en estos directorios
+/models/**/*.*
+/datasets/**/*.*
+/coco_converted/**/*.*
+/shiny_salmon_models/**/*.*
+
+
 
 # Files
 supersecrets.py
@@ -15,5 +31,3 @@ yolov8n.pt
 # VS Code
 .vscode/
 
-# Secrets
-supersecrets.py
