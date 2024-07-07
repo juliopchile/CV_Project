@@ -1,0 +1,7 @@
+path: C:\Users\Julio\PycharmProjects\Ultralytics\coco_converted\ShinySalmonsV4  # Modificar según corresponda
+train: images/train
+val: images/valid
+test: imagestest
+
+nc: 1
+names: ["salmon"]

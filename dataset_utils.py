@@ -2,7 +2,7 @@ import os
 import shutil
 from ultralytics.data.converter import convert_coco
 
-from config import datasets_link, datasets_directory, coco_labels_directory
+from config import datasets_link, datasets_directory, coco_labels_directory, obb_labels_directory, yolo_labels_directory
 from roboflow import Roboflow
 
 from supersecrets import API_KEY
@@ -139,25 +139,29 @@ def move_and_cleanup(base_path="coco_converted/Deepfish"):
 
 
 if __name__ == "__main__":
-    format = "coco-segmentation"
     datasets_a_descargar = ["Deepfish", "Salmon", "Shiny_v4"]
 
     # Descargar los datasets necesarios
     for name, info in datasets_link.items():
         if name in datasets_a_descargar:
-            path_install_dataset = os.path.join(datasets_directory, info['name'])
+            path_install_dataset_seg = os.path.join(datasets_directory, f"{info['name']}")
+            path_dataset_obb = os.path.join(obb_labels_directory, f"{info['name']}")
+            path_dataset_yolo = os.path.join(yolo_labels_directory, f"{info['name']}")
             workspace = info['workspace']
             project = info['project']
             version = info['version']
 
-            # Descargar dataset en formato coco desde Roboflow, en el directorio 'datasets'
-            download_roboflow_dataset(workspace, project, version, format, path_install_dataset)
+            # Descargar dataset en formato yolov8 desde Roboflow, en el directorio 'datasets' (para detección)
+            download_roboflow_dataset(workspace, project, version, "yolov8", path_dataset_yolo)
 
-            # Crear labels en formato Coco, en el directorio 'coco_converted'
-            crear_coco_labels(info['name'], path_install_dataset)
+            # Descargar dataset en formato coco desde Roboflow, en el directorio 'datasets' (para segmentación)
+            download_roboflow_dataset(workspace, project, version, "coco-segmentation", path_install_dataset_seg)
+
+            # Crear labels en formato Coco, en el directorio 'coco_converted' (para segmentación)
+            crear_coco_labels(info['name'], path_install_dataset_seg)
 
             # Copiar las imagenes desde el dataset descargado en 'datasets' al nuevo en 'coco_converted'
-            copiar_imagenes_a_nuevo_dataset(info['name'], path_install_dataset)
+            copiar_imagenes_a_nuevo_dataset(info['name'], path_install_dataset_seg)
 
             # Ordenar los labels y borrar carpetas vacías
             move_and_cleanup(os.path.join(coco_labels_directory, info['name']))

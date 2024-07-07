@@ -1,63 +1,99 @@
 import os
 
 from ultralytics import YOLO
-from config import datasets_path, backbones_directory
+from config import datasets_path_seg, datasets_path_det
 
-
-def get_dataset_from_weight_path(best_pt: str):
-    best_pt = os.path.normpath(best_pt)
-    # Dividir la ruta en partes
-    parts = best_pt.split(os.sep)
-
-    # Extraer los valores
-    model = parts[2]
-    dataset = parts[3]
-    optimizer = parts[4]
-
-    return model, dataset, optimizer
-
-
-def get_dataset_path_from_alejandro_weight_pt(model_pt):
-    if model_pt == r"models\backbone\DEEP_0001_SGD.pt":
-        return "Deepfish"
-    elif model_pt == r"models\backbone\DEEP_LO_DUP_L_SGD.pt":
-        return "Deepfish"
-    elif model_pt == r"models\backbone\SALMONS_LO_YOLOL_ADAM.pt":
-        return "Salmones"
-    elif model_pt == r"models\backbone\SALMONS_YOLOL_SGD.pt":
-        return "Salmones"
-    elif model_pt == r"models\backbone\SALMONS_YOLOL_SGD_RETRAINED.pt":
-        return "Salmones"
+val_dict_det_v9 = {
+    # yolov9c - Deepfish
+    "Run_1": {
+        "model": "yolov9c",
+        "dataset": "Deepfish",
+        "case": "Adam",
+        "weight_path": "models/training/yolov9c/Deepfish/Adam/weights/best.pt",
+    },
+    "Run_2": {
+        "model": "yolov9c",
+        "dataset": "Deepfish",
+        "case": "Adam_finetuned",
+        "weight_path": "models/training/yolov9c/Deepfish/Adam_finetuned/weights/best.pt",
+    },
+    "Run_3": {
+        "model": "yolov9c",
+        "dataset": "Deepfish",
+        "case": "SGD",
+        "weight_path": "models/training/yolov9c/Deepfish/SGD/weights/best.pt",
+    },
+    "Run_4": {
+        "model": "yolov9c",
+        "dataset": "Deepfish",
+        "case": "SGD_finetuned",
+        "weight_path": "models/training/yolov9c/Deepfish/SGD_finetuned/weights/best.pt",
+    },
+    # yolov9c - Salmones
+    "Run_5": {
+        "model": "yolov9c",
+        "dataset": "Salmones",
+        "case": "Adam",
+        "weight_path": "models/training/yolov9c/Salmones/Adam/weights/best.pt",
+    },
+    "Run_6": {
+        "model": "yolov9c",
+        "dataset": "Salmones",
+        "case": "Adam_finetuned",
+        "weight_path": "models/training/yolov9c/Salmones/Adam_finetuned/weights/best.pt",
+    },
+    "Run_7": {
+        "model": "yolov9c",
+        "dataset": "Salmones",
+        "case": "SGD",
+        "weight_path": "models/training/yolov9c/Salmones/SGD/weights/best.pt",
+    },
+    "Run_8": {
+        "model": "yolov9c",
+        "dataset": "Salmones",
+        "case": "SGD_finetuned",
+        "weight_path": "models/training/yolov9c/Salmones/SGD_finetuned/weights/best.pt",
+    },
+    # yolov9e - Deepfish
+    "Run_9": {
+        "model": "yolov9e",
+        "dataset": "Deepfish",
+        "case": "Adam",
+        "weight_path": "models/training/yolov9e/Deepfish/Adam/weights/best.pt",
+    },
+    "Run_10": {
+        "model": "yolov9e",
+        "dataset": "Deepfish",
+        "case": "SGD",
+        "weight_path": "models/training/yolov9e/Deepfish/SGD/weights/best.pt",
+    },
+    # yolov9e - Salmones
+    "Run_11": {
+        "model": "yolov9e",
+        "dataset": "Salmones",
+        "case": "Adam",
+        "weight_path": "models/training/yolov9e/Salmones/Adam/weights/best.pt",
+    },
+    "Run_12": {
+        "model": "yolov9e",
+        "dataset": "Salmones",
+        "case": "SGD",
+        "weight_path": "models/training/yolov9e/Salmones/SGD/weights/best.pt",
+    },
+}
 
 
 if __name__ == "__main__":
-    lista_modelos_ale = ["DEEP_0001_SGD.pt", "DEEP_LO_DUP_L_SGD.pt", "SALMONS_LO_YOLOL_ADAM.pt", "SALMONS_YOLOL_SGD.pt",
-                         "SALMONS_YOLOL_SGD_RETRAINED.pt"]
-    lista_de_model_pt = [os.path.normpath(os.path.join(backbones_directory, modelo)) for modelo in lista_modelos_ale]
+    # Validar modelos de detección YoloV9
+    for run, data in val_dict_det_v9.items():
+        model_to_val = data["weight_path"]
+        dataset = datasets_path_det[data["dataset"]]
+        save_dir = os.path.join("val", data["model"], data["dataset"], data["case"])
 
-    # Validar los modelos mios
-    for best_path in lista_de_model_pt[5:]:
-        model_name, dataset_name, optimizer = get_dataset_from_weight_path(best_path)
-        validation_directory = f"{model_name}/{dataset_name}/{optimizer}"
-        dataset_path = datasets_path[dataset_name]
-        model = YOLO(best_path)
-        model.val(data=dataset_path, imgsz=640, batch=9, conf=0.3, iou=0.5, max_det=30, save_json=True, rect=True)
+        # Validar uno por uno (a mano)
+        model = YOLO(model_to_val, task="detect")
+        model.val(data=dataset, imgsz=640, conf=0.5, iou=0.5, max_det=15, name=save_dir)
         del model
 
-    # Validar modelos entrenados del Alejandro
-    for best_path in lista_de_model_pt[0:5]:
-        dataset_name = get_dataset_path_from_alejandro_weight_pt(best_path)
-        validation_directory, _ = os.path.splitext(best_path)
-        dataset_path = datasets_path[dataset_name]
-        model = YOLO(best_path)
-        model.val(data=dataset_path, imgsz=640, batch=9, conf=0.3, iou=0.5, max_det=30, save_json=True, rect=True)
-        del model
-
-    # Validar uno por uno (a mano)
-    model = YOLO("models/training/yolov9e-seg/ShinySalmonsV4/SGD/weights/best.pt")
-    model.val(data=datasets_path["ShinySalmonsV4"], imgsz=640, batch=8, conf=0.3, iou=0.5, max_det=10, save_json=True)
-    del model
-
-    model = YOLO("models/training/yolov9c-seg/ShinySalmonsV4/Adam/weights/best.pt")
-    model.val(data=datasets_path["ShinySalmonsV4"], imgsz=640, batch=8, conf=0.3, iou=0.5, max_det=10, save_json=True)
-    del model
+    
+    

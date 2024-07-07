@@ -1,0 +1,7 @@
+path: C:\Users\Julio\PycharmProjects\Ultralytics\coco_converted\Deepfish  # Modificar según corresponda
+train: images/train
+val: images/valid
+test: images/test
+
+nc: 1
+names: ["fish"]

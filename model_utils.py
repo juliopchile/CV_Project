@@ -1,6 +1,8 @@
 import os
 from ultralytics import FastSAM, SAM, YOLO, NAS
-from config import backbones_directory, yolo_models, sam_models, fast_sam_models, nas_models
+from config import backbones_directory, yolo_models, sam_models, fast_sam_models, nas_models, downloadable_models
+
+
 
 
 def model_path(name: str) -> str:
@@ -71,19 +73,13 @@ def export_to_tensor_rt(model_path: str, **extra_params):
 
 
 if __name__ == "__main__":
-    # Descargar todos los modelos
-    # download_models(downloadable_models)
-
-    # Descargar solo los necesarios
-    download_models(['yolov9c-seg', 'yolov9e-seg'])
-
-    # Cargar un modelo y hacer inferencia con la camara (YoloNas no funciona)
-    #model = load_ultralytics_YOLO("yolov9e-seg")
-    #model.info()
-    #model.predict(source=0, save=False, show=True)
+    lista_modelos = ['yolov9c-seg', 'yolov9e-seg', 'yolov9c', 'yolov9e', 'sam_l', 'sam_b', 'mobile_sam', 'FastSAM-x', 'yolov10l', 'yolov10x']
+    # Descargar modelos
+    download_models(lista_modelos)
 
     # Exportar un modelo
-    # model_pt_path = "models/training/yolov9c-seg/ShinySalmonsV4/Adam/weights/best.pt"
-    # export_to_onnx(model_pt_path, half=False, int8=True, imgsz=640, data="dataset_yaml_files/shiny_salmons_v4.yaml")
-    # export_to_tensor_rt(model_pt_path, half=False, int8=True, imgsz=640, data="dataset_yaml_files/shiny_salmons_v4.yaml")
+    #model_pt_path = "models/backbone/FastSAM-x.pt"
+    #export_to_onnx(model_pt_path, half=False, int8=True, imgsz=640, data="dataset_yaml/shiny_salmons_v4.yaml")
+    #export_to_tensor_rt(model_pt_path, half=False, int8=True, imgsz=640, data="dataset_yaml/salmones.yaml")
+
 
