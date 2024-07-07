@@ -8,77 +8,77 @@ val_dict_det_v9 = {
     "Run_1": {
         "model": "yolov9c",
         "dataset": "Deepfish",
-        "case": "Adam",
-        "weight_path": "models/training/yolov9c/Deepfish/Adam/weights/best.pt",
-    },
-    "Run_2": {
-        "model": "yolov9c",
-        "dataset": "Deepfish",
-        "case": "Adam_finetuned",
-        "weight_path": "models/training/yolov9c/Deepfish/Adam_finetuned/weights/best.pt",
-    },
-    "Run_3": {
-        "model": "yolov9c",
-        "dataset": "Deepfish",
         "case": "SGD",
         "weight_path": "models/training/yolov9c/Deepfish/SGD/weights/best.pt",
     },
-    "Run_4": {
+    "Run_2": {
         "model": "yolov9c",
         "dataset": "Deepfish",
         "case": "SGD_finetuned",
         "weight_path": "models/training/yolov9c/Deepfish/SGD_finetuned/weights/best.pt",
     },
+    "Run_3": {
+        "model": "yolov9c",
+        "dataset": "Deepfish",
+        "case": "Adam",
+        "weight_path": "models/training/yolov9c/Adam/SGD/weights/best.pt",
+    },
+    "Run_4": {
+        "model": "yolov9c",
+        "dataset": "Deepfish",
+        "case": "Adam_finetuned",
+        "weight_path": "models/training/yolov9c/Deepfish/Adam_finetuned/weights/best.pt",
+    },
     # yolov9c - Salmones
     "Run_5": {
-        "model": "yolov9c",
-        "dataset": "Salmones",
-        "case": "Adam",
-        "weight_path": "models/training/yolov9c/Salmones/Adam/weights/best.pt",
-    },
-    "Run_6": {
-        "model": "yolov9c",
-        "dataset": "Salmones",
-        "case": "Adam_finetuned",
-        "weight_path": "models/training/yolov9c/Salmones/Adam_finetuned/weights/best.pt",
-    },
-    "Run_7": {
         "model": "yolov9c",
         "dataset": "Salmones",
         "case": "SGD",
         "weight_path": "models/training/yolov9c/Salmones/SGD/weights/best.pt",
     },
-    "Run_8": {
+    "Run_6": {
         "model": "yolov9c",
         "dataset": "Salmones",
         "case": "SGD_finetuned",
         "weight_path": "models/training/yolov9c/Salmones/SGD_finetuned/weights/best.pt",
     },
+    "Run_7": {
+        "model": "yolov9c",
+        "dataset": "Salmones",
+        "case": "Adam",
+        "weight_path": "models/training/yolov9c/Salmones/Adam/weights/best.pt",
+    },
+    "Run_8": {
+        "model": "yolov9c",
+        "dataset": "Salmones",
+        "case": "Adam_finetuned",
+        "weight_path": "models/training/yolov9c/Salmones/Adam_finetuned/weights/best.pt",
+    },
     # yolov9e - Deepfish
     "Run_9": {
-        "model": "yolov9e",
-        "dataset": "Deepfish",
-        "case": "Adam",
-        "weight_path": "models/training/yolov9e/Deepfish/Adam/weights/best.pt",
-    },
-    "Run_10": {
         "model": "yolov9e",
         "dataset": "Deepfish",
         "case": "SGD",
         "weight_path": "models/training/yolov9e/Deepfish/SGD/weights/best.pt",
     },
+    "Run_10": {
+        "model": "yolov9e",
+        "dataset": "Deepfish",
+        "case": "Adam",
+        "weight_path": "models/training/yolov9e/Deepfish/Adam/weights/best.pt",
+    },
     # yolov9e - Salmones
     "Run_11": {
         "model": "yolov9e",
         "dataset": "Salmones",
-        "case": "Adam",
-        "weight_path": "models/training/yolov9e/Salmones/Adam/weights/best.pt",
+        "case": "SGD",
+        "weight_path": "models/training/yolov9e/Salmones/SGD/weights/best.pt",
     },
     "Run_12": {
         "model": "yolov9e",
         "dataset": "Salmones",
-        "case": "SGD",
-        "weight_path": "models/training/yolov9e/Salmones/SGD/weights/best.pt",
+        "case": "Adam",
+        "weight_path": "models/training/yolov9e/Salmones/Adam/weights/best.pt",
     },
 }
 

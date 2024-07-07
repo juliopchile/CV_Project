@@ -3,8 +3,6 @@ from ultralytics import FastSAM, SAM, YOLO, NAS
 from config import backbones_directory, yolo_models, sam_models, fast_sam_models, nas_models, downloadable_models
 
 
-
-
 def model_path(name: str) -> str:
     """
     Constructs the model path given the model name.
@@ -67,19 +65,19 @@ def export_to_onnx(model_path: str, **extra_params):
     model.export(format="onnx", **extra_params)
 
 
-def export_to_tensor_rt(model_path: str, **extra_params):
-    model = YOLO(model_path)
+def export_to_tensor_rt(model, **extra_params):
     model.export(format="engine", **extra_params)
 
 
 if __name__ == "__main__":
-    lista_modelos = ['yolov9c-seg', 'yolov9e-seg', 'yolov9c', 'yolov9e', 'sam_l', 'sam_b', 'mobile_sam', 'FastSAM-x', 'yolov10l', 'yolov10x']
+    #lista_modelos = ['yolov9c-seg', 'yolov9e-seg', 'yolov9c', 'yolov9e', 'sam_l', 'sam_b', 'mobile_sam', 'FastSAM-x',
+    #                 'yolov10l', 'yolov10x']
     # Descargar modelos
-    download_models(lista_modelos)
+    #download_models(lista_modelos)
 
     # Exportar un modelo
-    #model_pt_path = "models/backbone/FastSAM-x.pt"
-    #export_to_onnx(model_pt_path, half=False, int8=True, imgsz=640, data="dataset_yaml/shiny_salmons_v4.yaml")
-    #export_to_tensor_rt(model_pt_path, half=False, int8=True, imgsz=640, data="dataset_yaml/salmones.yaml")
-
-
+    model_pt_path = "models/training/yolov9c/Salmones/SGD_finetuned/weights/best.pt"
+    model = YOLO(model_pt_path)
+    #export_to_tensor_rt(model, half=False, int8=True, imgsz=640, data="dataset_yaml/deepfish.yaml")
+    export_to_tensor_rt(model, half=False, int8=True, imgsz=640, data="dataset_yaml/salmones.yaml")
+    #model.predict(source=0, show=True)

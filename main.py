@@ -2,7 +2,7 @@ import os
 from ultralytics import settings, YOLO
 from config import backbones_directory, datasets_path_seg
 from threading import Thread
-from training_runs import run_1, run_2, run_3, train_shiny_salmons, run_4
+from training_runs import run_1, run_2, run_3, train_shiny_salmons_seg, run_4, train_shiny_salmons_det
 
 # Turn DVC false para que no moleste en el entrenamiento
 settings.update({'dvc': False})
@@ -62,14 +62,17 @@ if __name__ == "__main__":
     # run_2()
     # run_3()
 
-    # ? Parte 1.5 (entrenar para shiny salmons)
-
+    # ? Parte 1.5 (entrenar segmentación para shiny salmons)
     # Mejores modelos para los entrenamientos anteriores con el dataset Salmon
     #best_model_c = "models/training/yolov9c-seg/Deepfish/SGD_3/weights/best.pt"
     #best_model_e = "models/training/yolov9e-seg/Salmones/SGD_2/weights/best.pt"
-
-    # Entrenar para el dataset shiny salmons
-    #train_shiny_salmons()
+    #train_shiny_salmons_seg(best_model_c, best_model_e)
     
     # ? Parte 2 (entrenar yolo de detección)
-    run_4()
+    # run_4()
+
+    # ? Parte 2.5 (entrenar detección para shiny salmons)
+    # Mejores modelos para los entrenamientos anteriores con el dataset Salmon
+    best_model_c = "models/training/yolov9c/Salmones/SGD_finetuned/weights/best.pt"
+    best_model_e = "models/training/yolov9e/Deepfish/SGD/weights/best.pt"
+    train_shiny_salmons_det(best_model_c, best_model_e)

@@ -44,7 +44,7 @@ datasets_path_seg = {
 }
 
 datasets_path_det = {
-    "Salmones": "yolo_dataset/Salmones/data.yaml",
-    "Deepfish": "yolo_dataset/Deepfish/data.yaml",
-    #"ShinySalmonsV4": "yolo_dataset/shiny_salmons_v4/data.yaml"
+    #"Salmones": "yolo_dataset/Salmones/data.yaml",
+    #"Deepfish": "yolo_dataset/Deepfish/data.yaml",
+    "ShinySalmonsV4": "yolo_dataset/shiny_salmons_v4/data.yaml"
 }
