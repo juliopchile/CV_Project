@@ -23,20 +23,22 @@ loadable_models = downloadable_models + nas_models
 # Path donde guardar todos los datasets
 datasets_directory = "datasets"             # Path temporal donde guardar datasets descargados desde Roboflow
 coco_labels_directory = "coco_converted"    # Path donde guardar los datasets de segmentación
-obb_labels_directory = "yolo_obb_dataset"   # Path donde guardar los datasets de detección con caja englobante orientada
+obb_labels_directory = "yolo_obb_dataset"   # Path donde guardar los datasets de detección con caja englobante orientada (no se usó)
 yolo_labels_directory = "yolo_dataset"      # Path donde guardar los datasets de detección con caja englobante normal
 
 # Diccionario usado para descargar datasets
+# Dataset Salmon debe ser descargado manualmente y dejado en los directorios correspondientes.
 datasets_link = {
     "Deepfish": dict(workspace="memristor", project="deepfish-segmentation-ocdlj", version=3, name="Deepfish"),
     "Deepfish_LO": dict(workspace="memristor", project="deepfish-segmentation-ocdlj", version=4, name="Deepfish_LO"),
-    "Salmon": dict(workspace="memristor", project="salmones-ji1wj", version=5, name="Salmones"),
-    "Salmon_LO": dict(workspace="memristor", project="salmones-ji1wj", version=6, name="Salmones_LO"),
+    #"Salmon": dict(workspace="memristor", project="salmones-ji1wj", version=5, name="Salmones"),
+    #"Salmon_LO": dict(workspace="memristor", project="salmones-ji1wj", version=6, name="Salmones_LO"),
     "Shiny_v2": dict(workspace="alejandro-guerrero-zihxm", project="shiny_salmons", version=2, name="ShinySalmonsV2"),
     "Shiny_v4": dict(workspace="alejandro-guerrero-zihxm", project="shiny_salmons", version=4, name="ShinySalmonsV4"),
 }
 
-# Diccionario usado para acceder a los datasets para los experimentos. (Comentar/borrar los que no se quieran entrenar)
+# Diccionario usado para acceder a los datasets para los experimentos.
+# (Comentar/borrar los que no se quieran entrenar)
 datasets_path_seg = {
     "Salmones": "dataset_yaml/salmones.yaml",
     "Deepfish": "dataset_yaml/deepfish.yaml",
