@@ -12,9 +12,11 @@ def get_training_params_for_datasets(model: str = "yolov8x-seg", segmentation: b
     modelo de entrada. Los datasets son sacados de "datasets_path" del módulo config y los parámetros son por defecto.
     Args:
         model (str): El nombre del modelo a utilizar en las rutas del proyecto.
+        segmentation (bool): Define el entrenamiento si es para segmentación o detección
 
     Returns:
         Dict[str, Dict[str, Any]]: Diccionario con configuraciones de entrenamiento.
+
     """
     # Pesos a usar en el entrenamiento
     model_pt = model_path(model)
@@ -22,7 +24,7 @@ def get_training_params_for_datasets(model: str = "yolov8x-seg", segmentation: b
     # Crear hiperparámetros para cada dataset
     hiperparams = {}
     dataset_path = datasets_path_seg if segmentation else datasets_path_det
-    for dataset, path in datasets_path_seg.items():
+    for dataset, path in dataset_path.items():
         hiperparams.update({f"{dataset}": dict(data=path, project=f"models/training/{model}/{dataset}", model=model_pt)})
 
     return hiperparams
