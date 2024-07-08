@@ -59,8 +59,8 @@ def thread_safe_training(model_pt_path: str, hyperparameters_dict: Dict[str, Dic
 
 def thread_safe_re_training(hyperparameters_dict: Dict[str, Dict[str, Any]]):
     """
-    Permite el reentrenamiento (finetune) con un dataset usando un modelo local. Permite el uso entrenamiento por hilos.
-    No se requiere entregar path para el dataset pues este viene incluido en el diccionario de hiperparámetros.
+    Permite el re-entrenamiento (finetune) con un dataset usando un modelo local. Permite el entrenamiento por hilos.
+    No se requiere entregar path para el dataset, pues este viene incluido en el diccionario de hiperparámetros.
     :param hyperparameters_dict:
     :return:
     """

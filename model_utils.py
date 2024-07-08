@@ -76,8 +76,9 @@ if __name__ == "__main__":
     #download_models(lista_modelos)
 
     # Exportar un modelo
-    model_pt_path = "models/training/yolov9c/Salmones/SGD_finetuned/weights/best.pt"
+    model_pt_path = "models/backbone/SALMONS_YOLOL_SGD_RETRAINED.engine"
     model = YOLO(model_pt_path)
     #export_to_tensor_rt(model, half=False, int8=True, imgsz=640, data="dataset_yaml/deepfish.yaml")
-    export_to_tensor_rt(model, half=False, int8=True, imgsz=640, data="dataset_yaml/salmones.yaml")
+    #export_to_tensor_rt(model, half=False, int8=True, imgsz=640, data="dataset_yaml/salmones.yaml")
+    export_to_tensor_rt(model, half=False, int8=True, imgsz=640, data="dataset_yaml/shiny_salmons_v4.yaml")
     #model.predict(source=0, show=True)

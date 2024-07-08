@@ -139,7 +139,8 @@ def move_and_cleanup(base_path="coco_converted/Deepfish"):
 
 
 if __name__ == "__main__":
-    datasets_a_descargar = ["Deepfish", "Salmon", "Shiny_v4"]
+    # datasets_a_descargar = ["Deepfish", "Shiny_v4", "Salmon"]
+    datasets_a_descargar = ["Deepfish", "Shiny_v4"]
 
     # Descargar los datasets necesarios
     for name, info in datasets_link.items():

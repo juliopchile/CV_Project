@@ -8,6 +8,7 @@ from PIL import Image
 
 from ultralytics.models.fastsam import FastSAMPrompt
 
+
 def image_to_np_ndarray(image):
     if type(image) is str:
         return np.array(Image.open(image))
@@ -26,7 +27,7 @@ class CustomFastSAMPrompt(FastSAMPrompt):
         self.device = device
         self.results = results
         self.img = image
-    
+
     def _segment_image(self, image, bbox):
         if isinstance(image, Image.Image):
             image_array = np.array(image)
@@ -94,14 +95,14 @@ class CustomFastSAMPrompt(FastSAMPrompt):
         return [x1, y1, x2, y2]
 
     def plot_to_result(self,
-             annotations,
-             bboxes=None,
-             points=None,
-             point_label=None,
-             mask_random_color=True,
-             better_quality=True,
-             retina=False,
-             withContours=True) -> np.ndarray:
+                       annotations,
+                       bboxes=None,
+                       points=None,
+                       point_label=None,
+                       mask_random_color=True,
+                       better_quality=True,
+                       retina=False,
+                       withContours=True) -> np.ndarray:
         if isinstance(annotations[0], dict):
             annotations = [annotation['segmentation'] for annotation in annotations]
         image = self.img
@@ -188,8 +189,10 @@ class CustomFastSAMPrompt(FastSAMPrompt):
         result = cv2.cvtColor(img_array, cv2.COLOR_RGB2BGR)
         plt.close()
         return result
-            
-    # Remark for refactoring: IMO a function should do one thing only, storing the image and plotting should be seperated and do not necessarily need to be class functions but standalone utility functions that the user can chain in his scripts to have more fine-grained control. 
+
+    # Remark for refactoring: IMO a function should do one thing only, storing the image and plotting should be
+    # seperated and do not necessarily need to be class functions but standalone utility functions that the user can
+    # chain in his scripts to have more fine-grained control.
     def plot(self,
              annotations,
              output_path,
@@ -203,13 +206,13 @@ class CustomFastSAMPrompt(FastSAMPrompt):
         if len(annotations) == 0:
             return None
         result = self.plot_to_result(
-            annotations, 
-            bboxes, 
-            points, 
-            point_label, 
+            annotations,
+            bboxes,
+            points,
+            point_label,
             mask_random_color,
-            better_quality, 
-            retina, 
+            better_quality,
+            retina,
             withContours,
         )
 
@@ -218,19 +221,19 @@ class CustomFastSAMPrompt(FastSAMPrompt):
             os.makedirs(path)
         result = result[:, :, ::-1]
         cv2.imwrite(output_path, result)
-     
+
     #   CPU post process
     def fast_show_mask(
-        self,
-        annotation,
-        ax,
-        random_color=False,
-        bboxes=None,
-        points=None,
-        pointlabel=None,
-        retinamask=True,
-        target_height=960,
-        target_width=960,
+            self,
+            annotation,
+            ax,
+            random_color=False,
+            bboxes=None,
+            points=None,
+            pointlabel=None,
+            retinamask=True,
+            target_height=960,
+            target_width=960,
     ):
         msak_sum = annotation.shape[0]
         height = annotation.shape[1]
@@ -278,16 +281,16 @@ class CustomFastSAMPrompt(FastSAMPrompt):
         ax.imshow(show)
 
     def fast_show_mask_gpu(
-        self,
-        annotation,
-        ax,
-        random_color=False,
-        bboxes=None,
-        points=None,
-        pointlabel=None,
-        retinamask=True,
-        target_height=960,
-        target_width=960,
+            self,
+            annotation,
+            ax,
+            random_color=False,
+            bboxes=None,
+            points=None,
+            pointlabel=None,
+            retinamask=True,
+            target_height=960,
+            target_width=960,
     ):
         msak_sum = annotation.shape[0]
         height = annotation.shape[1]
@@ -305,7 +308,8 @@ class CustomFastSAMPrompt(FastSAMPrompt):
         transparency = torch.ones((msak_sum, 1, 1, 1)).to(annotation.device) * 0.6
         visual = torch.cat([color, transparency], dim=-1)
         mask_image = torch.unsqueeze(annotation, -1) * visual
-        # Select data according to the index. The index indicates which batch's data to choose at each position, converting the mask_image into a single batch form.
+        # Select data according to the index. The index indicates which batch's data to choose at each position,
+        # converting the mask_image into a single batch form.
         show = torch.zeros((height, weight, 4)).to(annotation.device)
         try:
             h_indices, w_indices = torch.meshgrid(torch.arange(height), torch.arange(weight), indexing='ij')
@@ -342,14 +346,13 @@ class CustomFastSAMPrompt(FastSAMPrompt):
     def retrieve(self, model, preprocess, elements, search_text: str, device) -> int:
         preprocessed_images = [preprocess(image).to(device) for image in elements]
         try:
-           import clip  # for linear_assignment
-    
-        except (ImportError, AssertionError, AttributeError):
-           from ultralytics.utils.checks import check_requirements
-    
-           check_requirements('git+https://github.com/openai/CLIP.git')  # required before installing lap from source
-           import clip
+            import clip  # for linear_assignment
 
+        except (ImportError, AssertionError, AttributeError):
+            from ultralytics.utils.checks import check_requirements
+
+            check_requirements('git+https://github.com/openai/CLIP.git')  # required before installing lap from source
+            import clip
 
         tokenized_text = clip.tokenize([search_text]).to(device)
         stacked_images = torch.stack(preprocessed_images)
@@ -379,14 +382,14 @@ class CustomFastSAMPrompt(FastSAMPrompt):
                 filter_id.append(_)
                 continue
             bbox = self._get_bbox_from_mask(mask['segmentation'])  # mask 的 bbox
-            cropped_boxes.append(self._segment_image(image, bbox))  
+            cropped_boxes.append(self._segment_image(image, bbox))
             # cropped_boxes.append(segment_image(image,mask["segmentation"]))
             cropped_images.append(bbox)  # Save the bounding box of the cropped image.
 
         return cropped_boxes, cropped_images, not_crop, filter_id, annotations
 
     def box_prompt(self, bbox=None, bboxes=None):
-        if self.results == None:
+        if self.results is None:
             return []
         assert bbox is not None or bboxes is not None  # Verifica que al menos uno de ellos no sea None
         if bboxes is None:
@@ -423,7 +426,7 @@ class CustomFastSAMPrompt(FastSAMPrompt):
         return np.array(masks[max_iou_index].cpu().numpy())
 
     def point_prompt(self, points, pointlabel):  # numpy 
-        if self.results == None:
+        if self.results is None:
             return []
         masks = self._format_results(self.results[0], 0)
         target_height = self.img.shape[0]
@@ -448,7 +451,7 @@ class CustomFastSAMPrompt(FastSAMPrompt):
         return np.array([onemask])
 
     def text_prompt(self, text):
-        if self.results == None:
+        if self.results is None:
             return []
         format_results = self._format_results(self.results[0], 0)
         cropped_boxes, cropped_images, not_crop, filter_id, annotations = self._crop_image(format_results)
@@ -460,7 +463,6 @@ class CustomFastSAMPrompt(FastSAMPrompt):
         return np.array([annotations[max_idx]['segmentation']])
 
     def everything_prompt(self):
-        if self.results == None:
+        if self.results is None:
             return []
         return self.results[0].masks.data
-        
