@@ -1,8 +1,9 @@
 # Datasets
-- Deepfish: disponible con descarga directa desde Roboflow
+- Deepfish: disponible con descarga directa desde [Roboflow](https://universe.roboflow.com/memristor/deepfish-segmentation-ocdlj)
 - Salmon: disponible con descarga desde [One-Drive](https://usmcl-my.sharepoint.com/:f:/g/personal/julio_lopezb_sansano_usm_cl/EhFfwMzPsBVAtpc5rhund-QBJO7Cbiao084XnxQHPRUbpg?e=QmbrAB)
-- ShinySalmon: disponible con descarga desde Roboflow con invitación previa
-- De todas formas todos los datasets están en el link de One-Drive.
+- ShinySalmon: disponible con descarga desde Roboflow con invitación previa.
+
+**Todos los datasets están en el link de One-Drive.**
 
 # Código
 - config: módulo con definición de paths y datasets.
@@ -31,3 +32,7 @@
 - Videos probando inferencia en video en las listas de reproducción siguientes:
   - [SAM](https://www.youtube.com/playlist?list=PLaAjsJBsA0UTrqkqmjRvsd4QUNqs_Ygb_) (SAM_b - SAM_l - MobileSAM - FastSAM)
   - [Tracking](https://www.youtube.com/playlist?list=PLaAjsJBsA0UT4_vWxxlujuwxjat6lsZ-I) (Yolov8 - Yolov9 - FastSAM)
+
+# Informes en formato paper
+- [Parte 1](https://usmcl-my.sharepoint.com/:b:/g/personal/julio_lopezb_sansano_usm_cl/Ec5BoCSXgzZGqsnf7QvZ_OYBnIP-aIplpm2Kg1NTtxQgCg?e=d7HRgF) Entrenamiento de Yolov9-seg y comparación con el estado del arte.
+- [Parte 2](https://usmcl-my.sharepoint.com/:b:/g/personal/julio_lopezb_sansano_usm_cl/EZMhsb5AmF1HlquAtW8LXK0B8Q_kq_ZVq0RjWjpXAYWBkw?e=doxJHZ) Segmentación con SAM, cuantización y tracking.
