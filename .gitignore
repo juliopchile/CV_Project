@@ -1,6 +1,6 @@
 # Directories
 /runs/
-/test_videos/
+
 /coco_converted/
 /yolo_dataset/
 /models/
