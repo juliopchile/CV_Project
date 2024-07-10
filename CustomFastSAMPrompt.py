@@ -62,7 +62,7 @@ class CustomFastSAMPrompt(FastSAMPrompt):
             annotations.append(annotation)
         return annotations
 
-    def filter_masks(annotations):  # filte the overlap mask
+    def filter_masks(annotations):  # filter the overlap mask
         annotations.sort(key=lambda x: x['area'], reverse=True)
         to_remove = set()
         for i in range(0, len(annotations)):

@@ -346,40 +346,40 @@ def run_3(multi: bool = False):
         thread_safe_re_training(yolov9c_adam_finetune)  # Adam Modelo Large
 
 
-def train_shiny_salmons_seg(best_model_c, best_model_e, modelo_c="yolov9c-seg", modelo_e="yolov9e-seg"):
-    lr0 = 0.001  # Cambiar según se requiera
+def train_shiny_salmons_seg(best_model_deepfish, best_model_salmones, modelo="yolov9c-seg"):
+    lr0 = 0.001
 
     # Parámetros por defecto para cada dataset, para ambos tamaños de modelo
-    train_params_c = get_training_params_for_datasets(modelo_c)
-    train_params_e = get_training_params_for_datasets(modelo_e)
-    add_extra_training_params(train_params_c, lr0=lr0, batch=8, imgsz=640, single_cls=True, cos_lr=True, plots=True)
-    add_extra_training_params(train_params_e, lr0=lr0, batch=8, imgsz=640, single_cls=True, cos_lr=True, plots=True)
+    train_params = get_training_params_for_datasets(modelo)
+    add_extra_training_params(train_params, lr0=lr0, batch=8, imgsz=640, single_cls=True, cos_lr=True, plots=True)
 
-    # ShinySalmon C
-    yolov9c_seg_shiny = copy.deepcopy(train_params_c)
-    add_extra_training_params(yolov9c_seg_shiny, optimizer="SGD", name="SGD", epochs=60, freeze=10, model=best_model_c)
+    # Entrenar con el mejor modelo en Deepfish
+    yolov9c_deepfish = copy.deepcopy(train_params)
+    add_extra_training_params(yolov9c_deepfish, optimizer="SGD", name="Deepfish_SGD", epochs=70, freeze=10,
+                              model=best_model_deepfish)
     # Fine-tune
-    yolov9c_sgd_shiny_finetune = copy.deepcopy(train_params_c)
-    add_extra_training_params(yolov9c_sgd_shiny_finetune, optimizer="SGD", name="SGD_finetuned", epochs=20,
+    yolov9c_deepfish_finetune = copy.deepcopy(train_params)
+    add_extra_training_params(yolov9c_deepfish_finetune, optimizer="SGD", name="Deepfish_SGD_finetuned", epochs=30,
                               lr0=lr0 / 10)
-    for key, value in yolov9c_seg_shiny.items():
-        yolov9c_sgd_shiny_finetune[key]["model"] = os.path.join(value["project"], value["name"], "weights", "best.pt")
+    for key, value in yolov9c_deepfish.items():
+        yolov9c_deepfish_finetune[key]["model"] = os.path.join(value["project"], value["name"], "weights", "best.pt")
 
-    # ShinySalmon E
-    yolov9e_seg_shiny = copy.deepcopy(train_params_e)
-    add_extra_training_params(yolov9e_seg_shiny, optimizer="SGD", name="SGD_640", epochs=60, freeze=30,
-                              model=best_model_e)
-    # Re-train
-    yolov9e_sgd_shiny_finetune = copy.deepcopy(train_params_e)
-    add_extra_training_params(yolov9e_sgd_shiny_finetune, optimizer="SGD", name="SGD_640_retrain", freeze=30, epochs=20,
+    # Entrenar con el mejor modelo en Salmones
+    yolov9c_salmones = copy.deepcopy(train_params)
+    add_extra_training_params(yolov9c_salmones, optimizer="SGD", name="Salmones_SGD", epochs=70, freeze=10,
+                              model=best_model_salmones)
+    # Fine-tune
+    yolov9c_salmones_finetune = copy.deepcopy(train_params)
+    add_extra_training_params(yolov9c_salmones_finetune, optimizer="SGD", name="Salmones_SGD_finetuned", epochs=30,
                               lr0=lr0 / 10)
-    for key, value in yolov9e_seg_shiny.items():
-        yolov9e_sgd_shiny_finetune[key]["model"] = os.path.join(value["project"], value["name"], "weights", "best.pt")
+    for key, value in yolov9c_salmones.items():
+        yolov9c_salmones_finetune[key]["model"] = os.path.join(value["project"], value["name"], "weights", "best.pt")
 
-    thread_safe_re_training(yolov9c_seg_shiny)
-    thread_safe_re_training(yolov9e_sgd_shiny_finetune)
-    thread_safe_re_training(yolov9e_seg_shiny)
-    thread_safe_re_training(yolov9e_sgd_shiny_finetune)
+    # Llevar a cabo los entrenamientos
+    thread_safe_re_training(yolov9c_deepfish)
+    thread_safe_re_training(yolov9c_deepfish_finetune)
+    thread_safe_re_training(yolov9c_salmones)
+    thread_safe_re_training(yolov9c_salmones_finetune)
 
 
 # ! Detección
@@ -494,6 +494,8 @@ def run_4(multi: bool = False):
 
 def train_shiny_salmons_det(best_model_c, best_model_e, modelo_c="yolov9c", modelo_e="yolov9e"):
     lr0 = 0.001  # Cambiar según se requiera
+    epochs = 70
+    #patience = 12
 
     # Parámetros por defecto para cada dataset, para ambos tamaños de modelo
     train_params_c = get_training_params_for_datasets(modelo_c, False)
@@ -503,23 +505,24 @@ def train_shiny_salmons_det(best_model_c, best_model_e, modelo_c="yolov9c", mode
 
     # ShinySalmon C
     yolov9c_shiny = copy.deepcopy(train_params_c)
-    add_extra_training_params(yolov9c_shiny, optimizer="SGD", name="SGD", epochs=60, freeze=10, model=best_model_c)
+    add_extra_training_params(yolov9c_shiny, optimizer="SGD", name="SGD", epochs=epochs, freeze=10, model=best_model_c)
     # Fine-tune
     yolov9c_shiny_finetune = copy.deepcopy(train_params_c)
-    add_extra_training_params(yolov9c_shiny_finetune, optimizer="SGD", name="SGD_finetuned", epochs=20, lr0=lr0 / 10)
+    add_extra_training_params(yolov9c_shiny_finetune, optimizer="SGD", name="SGD_finetuned", epochs=25, lr0=lr0 / 10)
     for key, value in yolov9c_shiny.items():
         yolov9c_shiny_finetune[key]["model"] = os.path.join(value["project"], value["name"], "weights", "best.pt")
 
     # ShinySalmon E
     yolov9e_shiny = copy.deepcopy(train_params_e)
-    add_extra_training_params(yolov9e_shiny, optimizer="SGD", name="SGD_640", epochs=60, freeze=30, model=best_model_e)
+    add_extra_training_params(yolov9e_shiny, optimizer="SGD", name="SGD", epochs=epochs, freeze=30, model=best_model_e)
     # Re-train
-    yolov9e_sgd_shiny_finetune = copy.deepcopy(train_params_e)
-    add_extra_training_params(yolov9e_sgd_shiny_finetune, optimizer="SGD", name="SGD_640_retrain", freeze=30, epochs=20, lr0=lr0 / 10)
+    yolov9e_shiny_finetune = copy.deepcopy(train_params_e)
+    add_extra_training_params(yolov9e_shiny_finetune, optimizer="SGD", name="SGD_retrain", freeze=30, epochs=25,
+                              lr0=lr0 / 10)
     for key, value in yolov9e_shiny.items():
-        yolov9e_sgd_shiny_finetune[key]["model"] = os.path.join(value["project"], value["name"], "weights", "best.pt")
+        yolov9e_shiny_finetune[key]["model"] = os.path.join(value["project"], value["name"], "weights", "best.pt")
 
     thread_safe_re_training(yolov9c_shiny)
-    thread_safe_re_training(yolov9e_sgd_shiny_finetune)
+    thread_safe_re_training(yolov9c_shiny_finetune)
     thread_safe_re_training(yolov9e_shiny)
-    thread_safe_re_training(yolov9e_sgd_shiny_finetune)
+    thread_safe_re_training(yolov9e_shiny_finetune)

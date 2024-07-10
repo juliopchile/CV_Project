@@ -1,6 +1,7 @@
 import os
 from ultralytics import FastSAM, SAM, YOLO, NAS
-from config import backbones_directory, yolo_models, sam_models, fast_sam_models, nas_models, downloadable_models
+from config import (backbones_directory, yolo_models, sam_models, fast_sam_models, nas_models, downloadable_models,
+                    export_datasets_seg)
 
 
 def model_path(name: str) -> str:
@@ -75,10 +76,30 @@ if __name__ == "__main__":
     # Descargar modelos
     #download_models(lista_modelos)
 
-    # Exportar un modelo
-    model_pt_path = "models/backbone/SALMONS_YOLOL_SGD_RETRAINED.engine"
-    model = YOLO(model_pt_path)
-    #export_to_tensor_rt(model, half=False, int8=True, imgsz=640, data="dataset_yaml/deepfish.yaml")
-    #export_to_tensor_rt(model, half=False, int8=True, imgsz=640, data="dataset_yaml/salmones.yaml")
-    export_to_tensor_rt(model, half=False, int8=True, imgsz=640, data="dataset_yaml/shiny_salmons_v4.yaml")
-    #model.predict(source=0, show=True)
+    #model_pt_path = "models/backbone/DEEP_0001_SGD.pt"
+
+    # Exportar modelos del alejandro a formato ENGINE
+    #modelos_alejandro = ["models/backbone/DEEP_0001_SGD.pt", "models/backbone/DEEP_LO_DUP_L_SGD.pt",
+    #                     "models/backbone/SALMONS_LO_YOLOL_ADAM.pt", "models/backbone/SALMONS_YOLOL_SGD.pt",
+    #                     "models/backbone/SALMONS_YOLOL_SGD_RETRAINED.pt"]
+    datasets = ["ShinySalmonsV4", "ShinySalmonsV4", "ShinySalmonsV4", "ShinySalmonsV4", "ShinySalmonsV4"]
+
+    # Exportar mis mejores modelos a formato ENGINE
+    #modelos_best = ["models/training/yolov9c-seg/Deepfish/SGD_finetuned_3/weights/best.pt",
+    #                "models/training/yolov9c-seg/Deepfish/Adam_3/weights/best.pt",
+    #                "models/training/yolov9c-seg/Salmones/SGD_finetuned_3/weights/best.pt",
+    #                "models/training/yolov9c-seg/Salmones/Adam_finetuned_3/weights/best.pt"]
+
+    # Exportar los modelos entrenados con ShinySalmonsV4
+    shiny_models = ["models/training/yolov9c-seg/ShinySalmonsV4/Deepfish_SGD/weights/best.pt",
+                    "models/training/yolov9c-seg/ShinySalmonsV4/Deepfish_SGD_finetuned/weights/best.pt",
+                    "models/training/yolov9c-seg/ShinySalmonsV4/Salmones_SGD/weights/best.pt",
+                    "models/training/yolov9c-seg/ShinySalmonsV4/Salmones_SGD_finetuned/weights/best.pt"]
+
+    for model_pt_path, dataset in zip(shiny_models, datasets):
+        model = YOLO(model_pt_path, task="segment")
+        export_to_tensor_rt(model, int8=True, batch=8, dynamic=True, imgsz=640, data=export_datasets_seg[dataset])
+        del model
+
+    #model = YOLO(model="models/backbone/SALMONS_YOLOL_SGD_RETRAINED.engine", task="segment")
+    #model.predict(source="test_videos/FISH_INCREDIBLE_salmon_run_Underwater_footage.mp4", show=True)

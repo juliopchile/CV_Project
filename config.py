@@ -42,11 +42,23 @@ datasets_link = {
 datasets_path_seg = {
     "Salmones": "dataset_yaml/salmones.yaml",
     "Deepfish": "dataset_yaml/deepfish.yaml",
-    #"ShinySalmonsV4": "dataset_yaml/shiny_salmons_v4.yaml"
+    "ShinySalmonsV4": "dataset_yaml/shiny_salmons_v4.yaml"
+}
+datasets_path_det = {
+    "Salmones": "yolo_dataset/Salmones/data.yaml",
+    "Deepfish": "yolo_dataset/Deepfish/data.yaml",
+    "ShinySalmonsV4": "yolo_dataset/ShinySalmonsV4/data.yaml"
 }
 
-datasets_path_det = {
-    #"Salmones": "yolo_dataset/Salmones/data.yaml",
-    #"Deepfish": "yolo_dataset/Deepfish/data.yaml",
-    "ShinySalmonsV4": "yolo_dataset/shiny_salmons_v4/data.yaml"
+# Path a los dataset yaml files para exportar.
+# (Cambia el set de validación por el de entrenamiento para tener mejor calibración en la exportación)
+export_datasets_seg = {
+    "Salmones": "dataset_yaml/salmones_to_export.yaml",
+    "Deepfish": "dataset_yaml/deepfish_to_export.yaml",
+    "ShinySalmonsV4": "dataset_yaml/shiny_salmons_v4_to_export.yaml"
+}
+export_datasets_det = {
+    "Salmones": "yolo_dataset/Salmones/data_to_export.yaml",
+    "Deepfish": "yolo_dataset/Deepfish/data_to_export.yaml",
+    "ShinySalmonsV4": "yolo_dataset/ShinySalmonsV4/data_to_export.yaml"
 }
