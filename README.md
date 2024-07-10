@@ -21,7 +21,13 @@
 - coco_converted: aquí se encuentran los labels e imágenes del dataset de segmentación.
 - yolo_dataset: aquí se encuentran los datasets de detección.
 - test_files: imágenes de prueba.
-- test_files_salmon: imágenes de prueba, solo del dataset salmon
-- test_videos: videos de prueba (no incluido en github)
+- test_files_salmon: imágenes de prueba, solo del dataset salmon.
+- test_videos: videos de prueba.
 - models: donde se guardan los modelos y los resultados de entrenamiento. (creado por código/no incluido en github)
 - runs: donde se guardan resultados de validación y testeo. (creado por código/no incluido en github)
+
+# Videos e imágenes de inferencia
+- Imágenes de resultados para los distintos modelos SAM en la carpeta [Segmentaciones](Segmentaciones)
+- Videos probando inferencia en video en las listas de reproducción siguientes:
+  - [SAM](https://www.youtube.com/playlist?list=PLaAjsJBsA0UTrqkqmjRvsd4QUNqs_Ygb_) (SAM_b - SAM_l - MobileSAM - FastSAM)
+  - [Tracking](https://www.youtube.com/playlist?list=PLaAjsJBsA0UT4_vWxxlujuwxjat6lsZ-I) (Yolov8 - Yolov9 - FastSAM)

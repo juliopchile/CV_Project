@@ -87,8 +87,19 @@ if __name__ == "__main__":
     fast_sam_engine = "models/cuantizado/FastSAM-x-salmon.engine"
 
     # Hacer tracking
-    model = FastSAM(fast_sam)
-    model.track(source="test_videos/FISH_verde.avi", conf=0.3, iou=0.5, save=True, stream_buffer=True, tracker="botsort.yaml")
-    #model.track(source="test_videos/FISH_azul.avi", conf=0.1, iou=0.2, show=True)
+    best_model_mio = YOLO(best_model_mio_path, task="segment")
+    best_model_mio.track(source="test_videos/SHORT_verde.mov", conf=0.3, iou=0.5, tracker="botsort.yaml",
+                         save=False, name="mine_tracker")
+    best_model_mio.track(source="test_videos/SHORT_azul.mov", conf=0.3, iou=0.5, tracker="botsort.yaml",
+                         save=False, name="mine_tracker")
+    del best_model_mio
+
+    best_model_alejandro = YOLO(best_model_alejandro_engine, task="segment")
+    best_model_alejandro.track(source="test_videos/SHORT_verde.mov", conf=0.3, iou=0.5, tracker="botsort.yaml",
+                         save=False, name="alejandro_tracker")
+    best_model_alejandro.track(source="test_videos/SHORT_azul.mov", conf=0.3, iou=0.5, tracker="botsort.yaml",
+                         save=False, name="alejandro_tracker")
+    del best_model_alejandro
+
 
 
