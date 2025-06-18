@@ -36,3 +36,27 @@
 # Informes en formato paper
 - [Parte 1](https://usmcl-my.sharepoint.com/:b:/g/personal/julio_lopezb_sansano_usm_cl/Ec5BoCSXgzZGqsnf7QvZ_OYBnIP-aIplpm2Kg1NTtxQgCg?e=d7HRgF) Entrenamiento de Yolov9-seg y comparación con el estado del arte.
 - [Parte 2](https://usmcl-my.sharepoint.com/:b:/g/personal/julio_lopezb_sansano_usm_cl/EZMhsb5AmF1HlquAtW8LXK0B8Q_kq_ZVq0RjWjpXAYWBkw?e=doxJHZ) Segmentación con SAM, cuantización y tracking.
+
+# Resultados
+| Dataset           | Modelo                                     | Opt.  | Type    | F1 Score | mAP50 | mAP50‑95 |
+|-------------------|--------------------------------------------|-------|---------|----------|-------|----------|
+| **Deepfish**      | Yolov8x-seg                                | SGD   | Float32 | 0.884    | 0.938 | 0.728    |
+|                   | Yolov8x-seg                                | SGD   | Int8    | 0.871    | 0.921 | 0.748    |
+|                   | Yolov8l-seg + DUP L.O.                     | SGD   | Float32 | 0.924    | 0.928 | 0.730    |
+|                   | Yolov8l-seg + DUP L.O.                     | SGD   | Int8    | 0.703    | 0.656 | 0.487    |
+|                   | Yolov9c-seg F.T.                           | SGD   | Float32 | 0.987    | 0.994 | 0.823    |
+|                   | Yolov9c-seg F.T.                           | SGD   | Int8    | 0.5321   | 0.457 | 0.291    |
+|                   | Yolov9c-seg                                | AdamW | Float32 | 0.980    | 0.990 | 0.821    |
+|                   | Yolov9c-seg                                | AdamW | Int8    | 0.328    | 0.308 | 0.202    |
+| **Salmon**        | Yolov8l-seg.                               | SGD   | Float32 | 0.678    | 0.709 | 0.406    |
+|                   | Yolov8l-seg.                               | SGD   | Int8    | 0.5466   | 0.523 | 0.287    |
+|                   | Yolov8l-seg L.O.                           | Adam  | Float32 | 0.632    | 0.656 | 0.367    |
+|                   | Yolov8l-seg L.O.                           | Adam  | Int8    | 0.479    | 0.448 | 0.225    |
+|                   | Yolov9c-seg F.T.                           | SGD   | Float32 | 0.675    | 0.688 | 0.400    |
+|                   | Yolov9c-seg F.T.                           | SGD   | Int8    | 0.306    | 0.255 | 0.107    |
+|                   | Yolov9c-seg F.T.                           | AdamW | Float32 | 0.672    | 0.674 | 0.358    |
+|                   | Yolov9c-seg F.T.                           | AdamW | Int8    | 0.494    | 0.439 | 0.202    |
+| **ShinySalmonsV4**| Yolov8l-seg Retrained from Salmon          | SGD   | Float32 | 0.592    | 0.635 | 0.513    |
+|                   | Yolov8l-seg Retrained from Salmon          | SGD   | Int8    | 0.711    | 0.783 | 0.606    |
+|                   | Yolov9c-seg Retrained from Salmon          | SGD   | Float32 | 0.833    | 0.876 | 0.696    |
+|                   | Yolov9c-seg Retrained from Salmon          | SGD   | Int8    | 0.699    | 0.785 | 0.430    |
