@@ -1,9 +1,83 @@
+# Resumen
+Este es el código utilizado para una tarea de la asignatura de *Visión por Computador*, impartida por el profesor Marcos Zúñiga durante el primer semestre de 2024 en la Universidad Técnica Federico Santa María. La tarea se divide en tres partes: parte 0 (SOTA), donde se estudia el estado del arte de alguna tarea de visión por computador; parte 1 (benchmark), donde busca replicar los resultados de algun trabajo o paper previo; y la parte 2 (algoritmo), donde se busca realizar una mejora, cambio o innovación al trabajo realizado en la parte 1. El código es par las partes 1 y 2.
+
+- En la parte 1 se utiliza YOLO para realizar segmentación de instancias en peces, donde se replican resultados obtenidos por Alejandro Guerrero en su [memoria de titulación](https://repositorio.usm.cl/entities/tesis/e19ea8a6-b0eb-4727-903e-9c92f5d290bf) pero usando [YOLOv9](https://docs.ultralytics.com/models/yolov9/) además de [YOLOv8](https://docs.ultralytics.com/models/yolov8/).
+- En la parte 2 se hace un intento de probar modelos [SAM](https://docs.ultralytics.com/models/sam/), [MobileSAM](https://docs.ultralytics.com/es/models/mobile-sam/) y [FastSAM](https://docs.ultralytics.com/es/models/fast-sam/) para segmentación de dos etapas, usando YOLOv9 de detección y luego algún modelo SAM para la segmentación, también se intenta hacer tracking con modelos SAM.
+
 # Datasets
-- Deepfish: disponible con descarga directa desde [Roboflow](https://universe.roboflow.com/memristor/deepfish-segmentation-ocdlj)
-- Salmon: disponible con descarga desde [One-Drive](https://usmcl-my.sharepoint.com/:f:/g/personal/julio_lopezb_sansano_usm_cl/EhFfwMzPsBVAtpc5rhund-QBJO7Cbiao084XnxQHPRUbpg?e=QmbrAB)
-- ShinySalmon: disponible con descarga desde Roboflow con invitación previa.
+- Deepfish: disponible con descarga directa con [Roboflow](https://universe.roboflow.com/memristor/deepfish-segmentation-ocdlj).
+- Salmon: disponible con descarga desde [One-Drive](https://usmcl-my.sharepoint.com/:f:/g/personal/julio_lopezb_sansano_usm_cl/EhFfwMzPsBVAtpc5rhund-QBJO7Cbiao084XnxQHPRUbpg?e=QmbrAB).
+- ShinySalmon: disponible con descarga desde [Roboflow](https://app.roboflow.com/alejandro-guerrero-zihxm/shiny_salmons/4), con invitación previa.
 
 **Todos los datasets están en el link de One-Drive.**
+
+<table><thead>
+  <tr>
+    <th>Dataset</th>
+    <th>Task</th>
+    <th>Num. imgs</th>
+    <th>Num. segm.</th>
+    <th>Img. fondo</th>
+  </tr></thead>
+<tbody>
+  <tr>
+    <td rowspan="3">Deepfish<br>(620)</td>
+    <td>Train</td>
+    <td>309</td>
+    <td>182</td>
+    <td>161</td>
+  </tr>
+  <tr>
+    <td>Validation</td>
+    <td>125</td>
+    <td>79</td>
+    <td>59</td>
+  </tr>
+  <tr>
+    <td>Testing</td>
+    <td>186</td>
+    <td>113</td>
+    <td>90</td>
+  </tr>
+  <tr>
+    <td rowspan="3">Salmon<br>(801)</td>
+    <td>Train</td>
+    <td>715</td>
+    <td>3048</td>
+    <td>322</td>
+  </tr>
+  <tr>
+    <td>Validation</td>
+    <td>86</td>
+    <td>496</td>
+    <td>34</td>
+  </tr>
+  <tr>
+    <td>Testing</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+  </tr>
+  <tr>
+    <td rowspan="3">ShinySalmonsV4<br>(130)</td>
+    <td>Train</td>
+    <td>124</td>
+    <td>1189</td>
+    <td>0</td>
+  </tr>
+  <tr>
+    <td>Validation</td>
+    <td>4</td>
+    <td>30</td>
+    <td>0</td>
+  </tr>
+  <tr>
+    <td>Testing</td>
+    <td>2</td>
+    <td>16</td>
+    <td>0</td>
+  </tr>
+</tbody></table>
 
 # Código
 - config: módulo con definición de paths y datasets.
@@ -15,7 +89,7 @@
 - main: main hub desde donde poder llevar a cabo los entrenamientos definidos en training_runs.
 - validation: código para realizar validación de modelos de forma ordenada.
 - use_sam: código con funciones para utilizar SAM en conjunto con un modelo de detección.
-- CustomFastSAMPrompt: clase custom para realizar prompting con FastSAM, necesaria para múltiples instancias por imagen.
+- CustomFastSAMPrompt: clase modificada para realizar prompting con FastSAM, necesaria para múltiples instancias por imagen.
 
 # Directorios
 - dataset_yaml: contiene los archivos yaml para los datasets de segmentación guardados en coco_converted.
@@ -34,29 +108,170 @@
   - [Tracking](https://www.youtube.com/playlist?list=PLaAjsJBsA0UT4_vWxxlujuwxjat6lsZ-I) (Yolov8 - Yolov9 - FastSAM)
 
 # Informes en formato paper
+- [Parte 0](https://usmcl-my.sharepoint.com/:b:/g/personal/julio_lopezb_sansano_usm_cl/EXbcZc_b9RdHsuEVIhi4WdsBqIGwysmvGtxDmGA0u7RgCQ?e=G0JfYQ) Pre-informe con estado del arte (bien malo, no lo recomiendo).
 - [Parte 1](https://usmcl-my.sharepoint.com/:b:/g/personal/julio_lopezb_sansano_usm_cl/Ec5BoCSXgzZGqsnf7QvZ_OYBnIP-aIplpm2Kg1NTtxQgCg?e=d7HRgF) Entrenamiento de Yolov9-seg y comparación con el estado del arte.
-- [Parte 2](https://usmcl-my.sharepoint.com/:b:/g/personal/julio_lopezb_sansano_usm_cl/EZMhsb5AmF1HlquAtW8LXK0B8Q_kq_ZVq0RjWjpXAYWBkw?e=doxJHZ) Segmentación con SAM, cuantización y tracking.
+- [Parte 2](https://usmcl-my.sharepoint.com/:b:/g/personal/julio_lopezb_sansano_usm_cl/EZMhsb5AmF1HlquAtW8LXK0B8Q_kq_ZVq0RjWjpXAYWBkw?e=doxJHZ) Segmentación con SAM, cuantización TensorRT y tracking.
 
-# Resultados
-| Dataset           | Modelo                                     | Opt.  | Type    | F1 Score | mAP50 | mAP50‑95 |
-|-------------------|--------------------------------------------|-------|---------|----------|-------|----------|
-| **Deepfish**      | Yolov8x-seg                                | SGD   | Float32 | 0.884    | 0.938 | 0.728    |
-|                   | Yolov8x-seg                                | SGD   | Int8    | 0.871    | 0.921 | 0.748    |
-|                   | Yolov8l-seg + DUP L.O.                     | SGD   | Float32 | 0.924    | 0.928 | 0.730    |
-|                   | Yolov8l-seg + DUP L.O.                     | SGD   | Int8    | 0.703    | 0.656 | 0.487    |
-|                   | Yolov9c-seg F.T.                           | SGD   | Float32 | 0.987    | 0.994 | 0.823    |
-|                   | Yolov9c-seg F.T.                           | SGD   | Int8    | 0.5321   | 0.457 | 0.291    |
-|                   | Yolov9c-seg                                | AdamW | Float32 | 0.980    | 0.990 | 0.821    |
-|                   | Yolov9c-seg                                | AdamW | Int8    | 0.328    | 0.308 | 0.202    |
-| **Salmon**        | Yolov8l-seg.                               | SGD   | Float32 | 0.678    | 0.709 | 0.406    |
-|                   | Yolov8l-seg.                               | SGD   | Int8    | 0.5466   | 0.523 | 0.287    |
-|                   | Yolov8l-seg L.O.                           | Adam  | Float32 | 0.632    | 0.656 | 0.367    |
-|                   | Yolov8l-seg L.O.                           | Adam  | Int8    | 0.479    | 0.448 | 0.225    |
-|                   | Yolov9c-seg F.T.                           | SGD   | Float32 | 0.675    | 0.688 | 0.400    |
-|                   | Yolov9c-seg F.T.                           | SGD   | Int8    | 0.306    | 0.255 | 0.107    |
-|                   | Yolov9c-seg F.T.                           | AdamW | Float32 | 0.672    | 0.674 | 0.358    |
-|                   | Yolov9c-seg F.T.                           | AdamW | Int8    | 0.494    | 0.439 | 0.202    |
-| **ShinySalmonsV4**| Yolov8l-seg Retrained from Salmon          | SGD   | Float32 | 0.592    | 0.635 | 0.513    |
-|                   | Yolov8l-seg Retrained from Salmon          | SGD   | Int8    | 0.711    | 0.783 | 0.606    |
-|                   | Yolov9c-seg Retrained from Salmon          | SGD   | Float32 | 0.833    | 0.876 | 0.696    |
-|                   | Yolov9c-seg Retrained from Salmon          | SGD   | Int8    | 0.699    | 0.785 | 0.430    |
+# Resultados en segmentación
+
+<table>
+  <caption>
+    <b>Métricas de validación a los mejores modelos YOLO-seg entrenados, para cada dataset.</b>
+  </caption>
+  <thead>
+    <tr>
+      <th>Dataset</th>
+      <th>Modelo</th>
+      <th>Optimizador</th>
+      <th>Formato</th>
+      <th>F1 Score</th>
+      <th>mAP50</th>
+      <th>mAP50-95</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td rowspan="8">Deepfish</td>
+      <td rowspan="2">Yolov8x-seg</td>
+      <td rowspan="2">SGD</td>
+      <td>Float32</td>
+      <td>0.884</td>
+      <td>0.938</td>
+      <td>0.728</td>
+    </tr>
+    <tr>
+      <td>Int8</td>
+      <td>0.871</td>
+      <td>0.921</td>
+      <td>0.748</td>
+    </tr>
+    <tr>
+      <td rowspan="2">Yolov8l-seg + DUP L.O.</td>
+      <td rowspan="2">SGD</td>
+      <td>Float32</td>
+      <td>0.924</td>
+      <td>0.928</td>
+      <td>0.730</td>
+    </tr>
+    <tr>
+      <td>Int8</td>
+      <td>0.703</td>
+      <td>0.656</td>
+      <td>0.487</td>
+    </tr>
+    <tr>
+      <td rowspan="2">Yolov9c-seg F.T.</td>
+      <td rowspan="2">SGD</td>
+      <td>Float32</td>
+      <td>0.987</td>
+      <td>0.994</td>
+      <td>0.823</td>
+    </tr>
+    <tr>
+      <td>Int8</td>
+      <td>0.5321</td>
+      <td>0.457</td>
+      <td>0.291</td>
+    </tr>
+    <tr>
+      <td rowspan="2">Yolov9c-seg</td>
+      <td rowspan="2">AdamW</td>
+      <td>Float32</td>
+      <td>0.980</td>
+      <td>0.990</td>
+      <td>0.821</td>
+    </tr>
+    <tr>
+      <td>Int8</td>
+      <td>0.328</td>
+      <td>0.308</td>
+      <td>0.202</td>
+    </tr>
+    <tr>
+      <td rowspan="8">Salmon</td>
+      <td rowspan="2">Yolov8l-seg.</td>
+      <td rowspan="2">SGD</td>
+      <td>Float32</td>
+      <td>0.678</td>
+      <td>0.709</td>
+      <td>0.406</td>
+    </tr>
+    <tr>
+      <td>Int8</td>
+      <td>0.5466</td>
+      <td>0.523</td>
+      <td>0.287</td>
+    </tr>
+    <tr>
+      <td rowspan="2">Yolov8l-seg L.O.</td>
+      <td rowspan="2">Adam</td>
+      <td>Float32</td>
+      <td>0.632</td>
+      <td>0.656</td>
+      <td>0.367</td>
+    </tr>
+    <tr>
+      <td>Int8</td>
+      <td>0.479</td>
+      <td>0.448</td>
+      <td>0.225</td>
+    </tr>
+    <tr>
+      <td rowspan="4">Yolov9c-seg F.T.</td>
+      <td rowspan="2">SGD</td>
+      <td>Float32</td>
+      <td>0.675</td>
+      <td>0.688</td>
+      <td>0.400</td>
+    </tr>
+    <tr>
+      <td>Int8</td>
+      <td>0.306</td>
+      <td>0.255</td>
+      <td>0.107</td>
+    </tr>
+    <tr>
+      <td rowspan="2">AdamW</td>
+      <td>Float32</td>
+      <td>0.672</td>
+      <td>0.674</td>
+      <td>0.358</td>
+    </tr>
+    <tr>
+      <td>Int8</td>
+      <td>0.494</td>
+      <td>0.439</td>
+      <td>0.202</td>
+    </tr>
+    <tr>
+      <td rowspan="4">ShinySalmonsV4</td>
+      <td rowspan="2">Yolov8l-seg Retrained<br />from Salmon</td>
+      <td rowspan="2">SGD</td>
+      <td>Float32</td>
+      <td>0.592</td>
+      <td>0.635</td>
+      <td>0.513</td>
+    </tr>
+    <tr>
+      <td>Int8</td>
+      <td>0.711</td>
+      <td>0.783</td>
+      <td>0.606</td>
+    </tr>
+    <tr>
+      <td rowspan="2">Yolov9c-seg Retrained<br />from Salmon</td>
+      <td rowspan="2">SGD</td>
+      <td>Float32</td>
+      <td>0.833</td>
+      <td>0.876</td>
+      <td>0.696</td>
+    </tr>
+    <tr>
+      <td>Int8</td>
+      <td>0.699</td>
+      <td>0.785</td>
+      <td>0.430</td>
+    </tr>
+  </tbody>
+</table>
+
