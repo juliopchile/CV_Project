@@ -1,7 +1,7 @@
 # Resumen
 Este es el código utilizado para una tarea de la asignatura de *Visión por Computador*, impartida por el profesor Marcos Zúñiga durante el primer semestre de 2024 en la Universidad Técnica Federico Santa María. La tarea se divide en tres partes: parte 0 (SOTA), donde se estudia el estado del arte de alguna tarea de visión por computador; parte 1 (benchmark), donde busca replicar los resultados de algun trabajo o paper previo; y la parte 2 (algoritmo), donde se busca realizar una mejora, cambio o innovación al trabajo realizado en la parte 1. El código es par las partes 1 y 2.
 
-- En la parte 1 se utiliza YOLO para realizar segmentación de instancias en peces, donde se replican resultados obtenidos por Alejandro Guerrero en su [memoria de titulación](https://repositorio.usm.cl/entities/tesis/e19ea8a6-b0eb-4727-903e-9c92f5d290bf) pero usando [YOLOv9](https://docs.ultralytics.com/models/yolov9/) además de [YOLOv8](https://docs.ultralytics.com/models/yolov8/).
+- En la parte 1 se utiliza YOLO para realizar segmentación de instancias en peces, donde se replican resultados obtenidos por Alejandro Guerrero en su [memoria de titulación](https://repositorio.usm.cl/entities/tesis/e19ea8a6-b0eb-4727-903e-9c92f5d290bf) pero usando [YOLOv9](https://docs.ultralytics.com/models/yolov9/) en vez de [YOLOv8](https://docs.ultralytics.com/models/yolov8/).
 - En la parte 2 se hace un intento de probar modelos [SAM](https://docs.ultralytics.com/models/sam/), [MobileSAM](https://docs.ultralytics.com/es/models/mobile-sam/) y [FastSAM](https://docs.ultralytics.com/es/models/fast-sam/) para segmentación de dos etapas, usando YOLOv9 de detección y luego algún modelo SAM para la segmentación, también se intenta hacer tracking con modelos SAM.
 
 # Datasets
